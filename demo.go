@@ -2,7 +2,9 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"image/color"
+	"log"
 	"strconv"
 
 	"bitbucket.org/oakmoundstudio/oak"
@@ -22,6 +24,12 @@ var (
 )
 
 func main() {
+
+	err := oak.LoadConf("oak.config")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	oak.AddCommand("shape", func(args []string) {
 		if len(args) > 1 {
 			switch args[1] {
@@ -196,6 +204,7 @@ func main() {
 	})
 
 	oak.AddScene("demo", func(string, interface{}) {
+		fmt.Println("Demo start")
 		x := 320.0
 		y := 240.0
 		newPf := floatrange.NewLinear(1, 2)
@@ -230,7 +239,6 @@ func main() {
 
 	render.SetDrawStack(
 		render.NewCompositeR([]render.Renderable{}),
-		render.NewDrawFPS(),
 	)
 
 	oak.Init("demo")
