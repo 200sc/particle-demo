@@ -23,6 +23,28 @@ var (
 	src            *pt.Source
 )
 
+func parseShape(args []string) pt.ShapeFunction {
+	if len(args) > 0 {
+		switch args[0] {
+		case "square":
+			return pt.Square
+		case "circle":
+			return pt.Circle
+		case "diamond":
+			return pt.Diamond
+		case "checkered":
+			return pt.Checkered
+		case "or":
+			return pt.OrShape(parseShape(args[1:2]), parseShape(args[2:]))
+		case "and":
+			return pt.AndShape(parseShape(args[1:2]), parseShape(args[2:]))
+		case "not":
+			return pt.NotShape(parseShape(args[1:]))
+		}
+	}
+	return nil
+}
+
 func main() {
 
 	err := oak.LoadConf("oak.config")
@@ -32,14 +54,7 @@ func main() {
 
 	oak.AddCommand("shape", func(args []string) {
 		if len(args) > 1 {
-			switch args[1] {
-			case "square":
-				src.Generator.(pt.Shapeable).SetShape(pt.Square)
-			case "circle":
-				src.Generator.(pt.Shapeable).SetShape(pt.Circle)
-			case "diamond":
-				src.Generator.(pt.Shapeable).SetShape(pt.Diamond)
-			}
+			src.Generator.(pt.Shapeable).SetShape(parseShape(args[1:]))
 		}
 	})
 
