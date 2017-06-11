@@ -11,6 +11,7 @@ import (
 	"bitbucket.org/oakmoundstudio/oak/physics"
 	"bitbucket.org/oakmoundstudio/oak/render"
 	pt "bitbucket.org/oakmoundstudio/oak/render/particle"
+	"bitbucket.org/oakmoundstudio/oak/shape"
 	"github.com/200sc/go-dist/floatrange"
 	"github.com/200sc/go-dist/intrange"
 )
@@ -23,23 +24,25 @@ var (
 	src            *pt.Source
 )
 
-func parseShape(args []string) pt.ShapeFunction {
+func parseShape(args []string) shape.Shape {
 	if len(args) > 0 {
 		switch args[0] {
+		case "heart":
+			return shape.Heart
 		case "square":
-			return pt.Square
+			return shape.Square
 		case "circle":
-			return pt.Circle
+			return shape.Circle
 		case "diamond":
-			return pt.Diamond
+			return shape.Diamond
 		case "checkered":
-			return pt.Checkered
+			return shape.Checkered
 		case "or":
-			return pt.OrShape(parseShape(args[1:2]), parseShape(args[2:]))
+			return shape.JustIn(shape.OrIn(parseShape(args[1:2]).In, parseShape(args[2:]).In))
 		case "and":
-			return pt.AndShape(parseShape(args[1:2]), parseShape(args[2:]))
+			return shape.JustIn(shape.AndIn(parseShape(args[1:2]).In, parseShape(args[2:]).In))
 		case "not":
-			return pt.NotShape(parseShape(args[1:]))
+			return shape.JustIn(shape.NotIn(parseShape(args[1:]).In))
 		}
 	}
 	return nil
@@ -54,7 +57,10 @@ func main() {
 
 	oak.AddCommand("shape", func(args []string) {
 		if len(args) > 1 {
-			src.Generator.(pt.Shapeable).SetShape(parseShape(args[1:]))
+			sh := parseShape(args[1:])
+			if sh != nil {
+				src.Generator.(pt.Shapeable).SetShape(sh)
+			}
 		}
 	})
 
@@ -234,7 +240,7 @@ func main() {
 		startColorRand = color.RGBA{0, 0, 0, 0}
 		endColor = color.RGBA{255, 255, 255, 255}
 		endColorRand = color.RGBA{0, 0, 0, 0}
-		shape := pt.Square
+		shape := shape.Square
 		src = pt.NewColorGenerator(
 			pt.Pos(x, y),
 			pt.Duration(pt.Inf),
