@@ -8,12 +8,12 @@ import (
 	"strconv"
 
 	"bitbucket.org/oakmoundstudio/oak"
-	"bitbucket.org/oakmoundstudio/oak/physics"
-	"bitbucket.org/oakmoundstudio/oak/render"
-	pt "bitbucket.org/oakmoundstudio/oak/render/particle"
-	"bitbucket.org/oakmoundstudio/oak/shape"
 	"github.com/200sc/go-dist/floatrange"
 	"github.com/200sc/go-dist/intrange"
+	"github.com/oakmound/oak/physics"
+	"github.com/oakmound/oak/render"
+	pt "github.com/oakmound/oak/render/particle"
+	"github.com/oakmound/oak/shape"
 )
 
 var (
