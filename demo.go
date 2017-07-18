@@ -7,9 +7,9 @@ import (
 	"log"
 	"strconv"
 
-	"bitbucket.org/oakmoundstudio/oak"
 	"github.com/200sc/go-dist/floatrange"
 	"github.com/200sc/go-dist/intrange"
+	"github.com/oakmound/oak"
 	"github.com/oakmound/oak/physics"
 	"github.com/oakmound/oak/render"
 	pt "github.com/oakmound/oak/render/particle"
