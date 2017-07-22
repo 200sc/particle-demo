@@ -10,6 +10,8 @@ import (
 	"github.com/200sc/go-dist/floatrange"
 	"github.com/200sc/go-dist/intrange"
 	"github.com/oakmound/oak"
+	"github.com/oakmound/oak/event"
+	"github.com/oakmound/oak/mouse"
 	"github.com/oakmound/oak/physics"
 	"github.com/oakmound/oak/render"
 	pt "github.com/oakmound/oak/render/particle"
@@ -54,6 +56,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	oak.AddCommand("followMouse", func(args []string) {
+		event.GlobalBind(func(int, interface{}) int {
+			// It'd be interesting to attach to the mouse position
+			src.SetPos(float64(mouse.LastMouseEvent.X), float64(mouse.LastMouseEvent.Y))
+			return 0
+		}, "EnterFrame")
+	})
 
 	oak.AddCommand("shape", func(args []string) {
 		if len(args) > 1 {
